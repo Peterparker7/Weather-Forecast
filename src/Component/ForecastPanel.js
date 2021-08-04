@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import Drop from "../images/droplet-fill.svg";
 import { ReactComponent as Drop } from "../images/droplet-fill.svg";
 
 const DropIcon = styled(Drop)``;
@@ -100,7 +99,6 @@ const SmallIcon = styled.div`
   }
 `;
 const Item = styled.div`
-  /* color: white; */
   font-size: 16px;
   font-weight: bold;
 `;

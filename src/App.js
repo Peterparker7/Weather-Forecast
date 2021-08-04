@@ -1,12 +1,9 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "./normalize.css";
-import { ReactComponent as Logo } from "./logo.svg";
 import styled from "styled-components";
 
 import Search from "./Component/Search";
-import { useState, useEffect } from "react";
-import { woeidGet, weatherGet } from "./utils/api";
+import { useState } from "react";
 import Panel from "./Component/Panel";
 import ForecastPanel from "./Component/ForecastPanel";
 import weatherImage from "./images/weather.jpg";

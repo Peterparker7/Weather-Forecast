@@ -1,10 +1,7 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { weatherGet } from "../utils/api";
 import { keyframes } from "styled-components";
 import Drop from "../images/droplet-fill.svg";
 import Thermometer from "../images/thermometer-half.svg";
-import ReactLoading from "react-loading";
 
 const Fillup = keyframes`
 0%{
@@ -69,8 +66,6 @@ const Temp = styled.div`
     width: 80px;
     font-size: 32px;
     font-weight: 700;
-
-    /* flex-direction: column-reverse; */
   }
   @media (max-width: 500px) {
     display: none;
@@ -114,7 +109,6 @@ const Item = styled.div`
 
 const ChartField = styled.div`
   width: 50%;
-  /* margin: 0 auto; */
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -164,9 +158,6 @@ const SVG = styled.svg`
 `;
 
 const SVGRect = styled.svg`
-  /* width: 100px;
-
-  height: 100px; */
   position: relative;
   border-bottom: 1px solid #000;
   @media (max-width: 650px) {
@@ -175,12 +166,10 @@ const SVGRect = styled.svg`
 `;
 
 const MaxRect = styled.rect`
-  /* y: ${(props) => `${100 - props.maxTemp * 2}`}; */
   height: ${(props) => `${props.maxTemp * 2}px`};
   fill: lightsalmon;
 `;
 const MinRect = styled.rect`
-  /* height: -30px; */
   height: ${(props) => `${props.minTemp * 2}px`};
   fill: #80c7ff;
 `;
@@ -209,7 +198,6 @@ const SmallIcon = styled.div`
 export default function Panel({ weatherPanel, city, setIsSearching }) {
   if (!city || !weatherPanel || weatherPanel.length === 0) {
     return null;
-    // return <ReactLoading />;
   }
 
   const todayHTML = () => {
@@ -311,8 +299,6 @@ export default function Panel({ weatherPanel, city, setIsSearching }) {
   return (
     <>
       <div>{todayHTML()}</div>
-      {/* <div>{forecastHTML()}</div> */}
-      {/* <div>{weatherData[0].id}</div> */}
     </>
   );
 }
