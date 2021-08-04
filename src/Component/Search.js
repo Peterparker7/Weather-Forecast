@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { woeidGet, weatherGet } from "../utils/api";
 import styled from "styled-components";
 import searchIcon from "../images/search.svg";
-
-import Panel from "./Panel";
 
 const SearchBar = styled.div`
   width: 100%;
@@ -17,7 +15,7 @@ const SearchInput = styled.input`
   background: rgba(227, 227, 227, 0.6);
   border: none;
   border-radius: 4px;
-  margin-right: 5px;
+  margin-right: 10px;
   height: 40px;
   &:focus {
     outline: none;
@@ -45,43 +43,45 @@ export default function Search({
   setWeatherData,
   setWeatherPanel,
   setCity,
+  setIsSearching,
 }) {
-  //   const [woeid, setWoeid] = useState();
-  //   const [weatherData, setWeatherData] = useState([]);
   const [input, setInput] = useState();
 
   async function getCityId(inputCity) {
     const data = await woeidGet(inputCity);
-    console.log(data[0].woeid);
-    setWoeid(data[0].woeid);
-    return data;
+    if (data.length === 0) {
+      setWoeid(0);
+      setWeatherData([]);
+      setWeatherPanel([]);
+      return;
+    } else {
+      setWoeid(data[0].woeid);
+      return data;
+    }
   }
   async function getWeatherInfo(id) {
     const data = await weatherGet(id);
-    console.log(data);
     return data;
   }
-  //   const data = woeidGet("taipei");
-  //   console.log(data);
 
   const inputHandler = (e) => {
     setInput(e);
   };
 
   const searchHandler = async () => {
+    setIsSearching(true);
+
     const cityInfo = await getCityId(input);
-    const data = await getWeatherInfo(cityInfo[0].woeid);
 
-    console.log(cityInfo);
-    console.log(data);
-    setWeatherData(data);
-    setWeatherPanel(data.consolidated_weather[0]);
-    setCity(data.title);
+    if (cityInfo) {
+      const data = await getWeatherInfo(cityInfo[0].woeid);
+      setWeatherData(data);
+      setWeatherPanel(data.consolidated_weather[0]);
+      setCity(data.title);
+    }
+
+    setIsSearching(false);
   };
-
-  useEffect(() => {
-    // getCityId();
-  }, []);
 
   return (
     <SearchBar>
@@ -98,9 +98,6 @@ export default function Search({
       >
         <SearchIcon src={searchIcon} />
       </SearchButton>
-      {/* <div>{weatherData.title}</div> */}
-      {/* <img src="https://www.metaweather.com/static/img/weather/png/hr.png" /> */}
-      <Panel />
     </SearchBar>
   );
 }

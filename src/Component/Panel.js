@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { weatherGet } from "../utils/api";
 import { keyframes } from "styled-components";
 import Drop from "../images/droplet-fill.svg";
 import Thermometer from "../images/thermometer-half.svg";
@@ -18,7 +16,7 @@ const Fillup = keyframes`
 const PanelContainer = styled.div`
   background: rgba(227, 227, 227, 0.3);
   display: flex;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 30px;
   height: 300px;
 `;
@@ -29,8 +27,12 @@ const BasicField = styled.div`
 
 const City = styled.div`
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
+  margin-bottom: 5px;
+  @media (max-width: 500px) {
+    font-size: 32px;
+  }
 `;
 
 const ContentField = styled.div`
@@ -39,28 +41,62 @@ const ContentField = styled.div`
   align-items: center;
   width: 80%;
   margin: 0 auto;
+  @media (max-width: 767px) {
+    width: 90%;
+    padding: 20px 0px;
+    /* flex-direction: column-reverse; */
+  }
 `;
 const TextField = styled.div``;
 const Date = styled.div`
   font-size: 24px;
   font-weight: 300;
   color: white;
+  @media (max-width: 500px) {
+    font-size: 20px;
+  }
 `;
 const Temp = styled.div`
+  width: 120px;
+  text-align: center;
   font-size: 48px;
-  font-weight: 400;
+  font-weight: 700;
   color: white;
+  @media (max-width: 767px) {
+    width: 80px;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const RWDTemp = styled.div`
+  display: none;
+  @media (max-width: 500px) {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
 `;
 const WeatherState = styled.div`
   font-size: 24px;
   font-weight: 300;
   color: white;
+  @media (max-width: 500px) {
+    font-size: 20px;
+  }
 `;
 const WeatherIcon = styled.div``;
 const IconContainer = styled.div`
   width: 100px;
   height: 100px;
   margin-right: 20px;
+  @media (max-width: 650px) {
+    width: 80px;
+  }
 `;
 const Img = styled.img`
   width: 100%;
@@ -73,18 +109,26 @@ const Item = styled.div`
 
 const ChartField = styled.div`
   width: 50%;
-  /* margin: 0 auto; */
   display: flex;
   align-items: center;
   justify-content: space-around;
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 const TemperatureContainer = styled.div`
   padding-bottom: 70px;
+  @media (max-width: 650px) {
+    padding-bottom: 0px;
+  }
 `;
 const TemperatureChart = styled.div`
   position: relative;
   width: 150px;
   height: 150px;
+  @media (max-width: 650px) {
+    top: -60px;
+  }
 `;
 const HumidityChart = styled.div``;
 
@@ -107,23 +151,25 @@ const SVG = styled.svg`
     stroke-dasharray: ${(props) => `${props.humidity} 100`};
     animation: ${Fillup} 2s linear 1;
   }
+  @media (max-width: 650px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const SVGRect = styled.svg`
-  /* width: 100px;
-
-  height: 100px; */
   position: relative;
   border-bottom: 1px solid #000;
+  @media (max-width: 650px) {
+    top: -0px;
+  }
 `;
 
 const MaxRect = styled.rect`
-  /* y: ${(props) => `${100 - props.maxTemp * 2}`}; */
   height: ${(props) => `${props.maxTemp * 2}px`};
   fill: lightsalmon;
 `;
 const MinRect = styled.rect`
-  /* height: -30px; */
   height: ${(props) => `${props.minTemp * 2}px`};
   fill: #80c7ff;
 `;
@@ -131,6 +177,10 @@ const MinRect = styled.rect`
 const Title = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 15px;
+  @media (max-width: 650px) {
+    margin-top: 5px;
+  }
 `;
 const SmallIcon = styled.div`
   width: 24px;
@@ -139,9 +189,13 @@ const SmallIcon = styled.div`
   img {
     width: 100%;
   }
+  @media (max-width: 650px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
-export default function Panel({ weatherPanel, city }) {
+export default function Panel({ weatherPanel, city, setIsSearching }) {
   if (!city || !weatherPanel || weatherPanel.length === 0) {
     return null;
   }
@@ -158,6 +212,7 @@ export default function Panel({ weatherPanel, city }) {
       <PanelContainer>
         <BasicField>
           <City>{city}</City>
+          <RWDTemp>{currentTemp} °C</RWDTemp>
           <Date>{dateStr}</Date>
           <WeatherState>{weatherPanel.weather_state_name}</WeatherState>
 
@@ -183,9 +238,8 @@ export default function Panel({ weatherPanel, city }) {
                 <MaxRect
                   className="max"
                   x="25"
-                  y={100 - maxTemp * 2}
+                  y={`${100 - maxTemp * 2}`}
                   width="20"
-                  // height="90"
                   maxTemp={maxTemp}
                 ></MaxRect>
                 <text
@@ -216,7 +270,7 @@ export default function Panel({ weatherPanel, city }) {
                   {minTemp}
                 </text>
               </SVGRect>
-              <Title>
+              <Title style={{ marginTop: "7px" }}>
                 <SmallIcon>
                   <img src={Thermometer} alt="" />
                 </SmallIcon>
@@ -245,8 +299,6 @@ export default function Panel({ weatherPanel, city }) {
   return (
     <>
       <div>{todayHTML()}</div>
-      {/* <div>{forecastHTML()}</div> */}
-      {/* <div>{weatherData[0].id}</div> */}
     </>
   );
 }

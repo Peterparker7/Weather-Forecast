@@ -1,20 +1,17 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "./normalize.css";
-import { ReactComponent as Logo } from "./logo.svg";
 import styled from "styled-components";
 
 import Search from "./Component/Search";
-import { useState, useEffect } from "react";
-import { woeidGet, weatherGet } from "./utils/api";
+import { useState } from "react";
 import Panel from "./Component/Panel";
 import ForecastPanel from "./Component/ForecastPanel";
 import weatherImage from "./images/weather.jpg";
+import ReactLoading from "react-loading";
 
 const ForecastContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   @media (max-width: 1200px) {
     flex-direction: column;
   }
@@ -28,6 +25,7 @@ const PageContainer = styled.div`
   padding: 50px 20px;
   position: relative;
   min-height: calc(100vh);
+  color: white;
 `;
 
 const AppContainer = styled.div`
@@ -48,22 +46,39 @@ const SubTitle = styled.p`
   color: white;
   margin: 0;
 `;
+const Mask = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(227, 227, 227, 0.5);
+  z-index: 3;
+`;
+const CenterLoading = styled(ReactLoading)`
+  position: absolute;
 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const ErrorMsg = styled.div`
+  text-align: left;
+`;
 function App() {
   const [woeid, setWoeid] = useState();
   const [weatherData, setWeatherData] = useState([]);
   const [weatherPanel, setWeatherPanel] = useState([]);
   const [city, setCity] = useState("");
-
-  console.log(weatherData);
-  console.log(weatherPanel);
-
-  if (!weatherData) {
-    return "isLoading";
-  }
+  const [isSearching, setIsSearching] = useState(false);
 
   return (
     <div className="App">
+      {isSearching ? (
+        <Mask>
+          <CenterLoading type={"spin"} />
+        </Mask>
+      ) : (
+        ""
+      )}
       <PageContainer>
         <AppContainer>
           <Title>Weather Forecaster</Title>
@@ -73,17 +88,30 @@ function App() {
             setWeatherData={setWeatherData}
             setWeatherPanel={setWeatherPanel}
             setCity={setCity}
+            setIsSearching={setIsSearching}
           />
-          <Panel
-            weatherData={weatherData.consolidated_weather}
-            weatherPanel={weatherPanel}
-            city={city}
-          />
+          {woeid === 0 ? (
+            <ErrorMsg>
+              <h1>Oops, city not found</h1>
+              <h3>
+                please make sure the city spelling is correct and try again.
+              </h3>
+            </ErrorMsg>
+          ) : (
+            <Panel
+              setIsSearching={setIsSearching}
+              weatherData={weatherData.consolidated_weather}
+              weatherPanel={weatherPanel}
+              city={city}
+            />
+          )}
+
           <ForecastContainer>
             {weatherData.length !== 0 &&
               weatherData.consolidated_weather.map((item, index) => {
                 return (
                   <ForecastPanel
+                    key={index}
                     item={item}
                     index={index}
                     setWeatherPanel={setWeatherPanel}

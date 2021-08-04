@@ -7,7 +7,6 @@ const woeidGet = async (city) => {
     // console.log(res.json());
     return res.json();
   });
-  console.log(response);
   return response;
 };
 
@@ -15,7 +14,6 @@ const weatherGet = async (id) => {
   const response = await fetch(`${weatherApi}` + id).then((res) => {
     return res.json();
   });
-  console.log(response);
   return response;
 };
 
