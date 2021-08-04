@@ -24,7 +24,7 @@ const Container = styled.div`
     padding: 10px 30px;
   }
   &:hover {
-    background-color: rgba(227, 227, 227, 0.9);
+    background-color: rgba(247, 247, 247, 0.9);
     transform: scale(1.03);
     color: black;
     ${DropIcon} {

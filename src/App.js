@@ -70,14 +70,6 @@ function App() {
   const [city, setCity] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
-  console.log(weatherData);
-  console.log(weatherPanel);
-
-  if (!weatherData) {
-    return "isLoading";
-  }
-  console.log(isSearching);
-
   return (
     <div className="App">
       {isSearching ? (
@@ -119,6 +111,7 @@ function App() {
               weatherData.consolidated_weather.map((item, index) => {
                 return (
                   <ForecastPanel
+                    key={index}
                     item={item}
                     index={index}
                     setWeatherPanel={setWeatherPanel}
