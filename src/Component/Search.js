@@ -17,7 +17,7 @@ const SearchInput = styled.input`
   background: rgba(227, 227, 227, 0.6);
   border: none;
   border-radius: 4px;
-  margin-right: 5px;
+  margin-right: 10px;
   height: 40px;
   &:focus {
     outline: none;
@@ -45,6 +45,7 @@ export default function Search({
   setWeatherData,
   setWeatherPanel,
   setCity,
+  setIsSearching,
 }) {
   //   const [woeid, setWoeid] = useState();
   //   const [weatherData, setWeatherData] = useState([]);
@@ -52,9 +53,16 @@ export default function Search({
 
   async function getCityId(inputCity) {
     const data = await woeidGet(inputCity);
-    console.log(data[0].woeid);
-    setWoeid(data[0].woeid);
-    return data;
+    // console.log(data[0].woeid);
+    if (data.length === 0) {
+      setWoeid(0);
+      setWeatherData([]);
+      setWeatherPanel([]);
+      return;
+    } else {
+      setWoeid(data[0].woeid);
+      return data;
+    }
   }
   async function getWeatherInfo(id) {
     const data = await weatherGet(id);
@@ -69,14 +77,21 @@ export default function Search({
   };
 
   const searchHandler = async () => {
-    const cityInfo = await getCityId(input);
-    const data = await getWeatherInfo(cityInfo[0].woeid);
+    setIsSearching(true);
 
-    console.log(cityInfo);
-    console.log(data);
-    setWeatherData(data);
-    setWeatherPanel(data.consolidated_weather[0]);
-    setCity(data.title);
+    const cityInfo = await getCityId(input);
+
+    if (cityInfo) {
+      const data = await getWeatherInfo(cityInfo[0].woeid);
+
+      console.log(cityInfo);
+      console.log(data);
+      setWeatherData(data);
+      setWeatherPanel(data.consolidated_weather[0]);
+      setCity(data.title);
+    }
+
+    setIsSearching(false);
   };
 
   useEffect(() => {
@@ -100,7 +115,7 @@ export default function Search({
       </SearchButton>
       {/* <div>{weatherData.title}</div> */}
       {/* <img src="https://www.metaweather.com/static/img/weather/png/hr.png" /> */}
-      <Panel />
+      {/* <Panel /> */}
     </SearchBar>
   );
 }
