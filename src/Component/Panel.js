@@ -4,6 +4,7 @@ import { weatherGet } from "../utils/api";
 import { keyframes } from "styled-components";
 import Drop from "../images/droplet-fill.svg";
 import Thermometer from "../images/thermometer-half.svg";
+import ReactLoading from "react-loading";
 
 const Fillup = keyframes`
 0%{
@@ -18,7 +19,7 @@ const Fillup = keyframes`
 const PanelContainer = styled.div`
   background: rgba(227, 227, 227, 0.3);
   display: flex;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 30px;
   height: 300px;
 `;
@@ -39,6 +40,11 @@ const ContentField = styled.div`
   align-items: center;
   width: 80%;
   margin: 0 auto;
+  @media (max-width: 767px) {
+    width: 90%;
+    padding: 20px 0px;
+    /* flex-direction: column-reverse; */
+  }
 `;
 const TextField = styled.div``;
 const Date = styled.div`
@@ -47,9 +53,18 @@ const Date = styled.div`
   color: white;
 `;
 const Temp = styled.div`
+  width: 120px;
+  text-align: center;
   font-size: 48px;
-  font-weight: 400;
+  font-weight: 700;
   color: white;
+  @media (max-width: 767px) {
+    width: 80px;
+    font-size: 32px;
+    font-weight: 700;
+
+    /* flex-direction: column-reverse; */
+  }
 `;
 const WeatherState = styled.div`
   font-size: 24px;
@@ -61,6 +76,9 @@ const IconContainer = styled.div`
   width: 100px;
   height: 100px;
   margin-right: 20px;
+  @media (max-width: 650px) {
+    width: 80px;
+  }
 `;
 const Img = styled.img`
   width: 100%;
@@ -131,6 +149,7 @@ const MinRect = styled.rect`
 const Title = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 15px;
 `;
 const SmallIcon = styled.div`
   width: 24px;
@@ -141,9 +160,10 @@ const SmallIcon = styled.div`
   }
 `;
 
-export default function Panel({ weatherPanel, city }) {
+export default function Panel({ weatherPanel, city, setIsSearching }) {
   if (!city || !weatherPanel || weatherPanel.length === 0) {
     return null;
+    // return <ReactLoading />;
   }
 
   const todayHTML = () => {
@@ -183,9 +203,8 @@ export default function Panel({ weatherPanel, city }) {
                 <MaxRect
                   className="max"
                   x="25"
-                  y={100 - maxTemp * 2}
+                  y={`${100 - maxTemp * 2}`}
                   width="20"
-                  // height="90"
                   maxTemp={maxTemp}
                 ></MaxRect>
                 <text
@@ -216,7 +235,7 @@ export default function Panel({ weatherPanel, city }) {
                   {minTemp}
                 </text>
               </SVGRect>
-              <Title>
+              <Title style={{ marginTop: "7px" }}>
                 <SmallIcon>
                   <img src={Thermometer} alt="" />
                 </SmallIcon>
