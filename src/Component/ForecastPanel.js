@@ -49,6 +49,9 @@ const InfoField = styled.div`
     display: flex;
     width: 50%;
   }
+  @media (max-width: 500px) {
+    width: 70%;
+  }
 `;
 const Date = styled.div`
   font-size: 24px;
@@ -82,6 +85,9 @@ const Humidity = styled.div`
   @media (max-width: 1200px) {
     display: flex;
     align-items: center;
+  }
+  @media (max-width: 500px) {
+    display: none;
   }
 `;
 const SmallIcon = styled.div`

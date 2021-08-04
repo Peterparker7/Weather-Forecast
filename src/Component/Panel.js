@@ -30,8 +30,12 @@ const BasicField = styled.div`
 
 const City = styled.div`
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
+  margin-bottom: 5px;
+  @media (max-width: 500px) {
+    font-size: 32px;
+  }
 `;
 
 const ContentField = styled.div`
@@ -51,6 +55,9 @@ const Date = styled.div`
   font-size: 24px;
   font-weight: 300;
   color: white;
+  @media (max-width: 500px) {
+    font-size: 20px;
+  }
 `;
 const Temp = styled.div`
   width: 120px;
@@ -65,11 +72,27 @@ const Temp = styled.div`
 
     /* flex-direction: column-reverse; */
   }
+  @media (max-width: 500px) {
+    display: none;
+  }
+`;
+
+const RWDTemp = styled.div`
+  display: none;
+  @media (max-width: 500px) {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
 `;
 const WeatherState = styled.div`
   font-size: 24px;
   font-weight: 300;
   color: white;
+  @media (max-width: 500px) {
+    font-size: 20px;
+  }
 `;
 const WeatherIcon = styled.div``;
 const IconContainer = styled.div`
@@ -95,14 +118,23 @@ const ChartField = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 const TemperatureContainer = styled.div`
   padding-bottom: 70px;
+  @media (max-width: 650px) {
+    padding-bottom: 0px;
+  }
 `;
 const TemperatureChart = styled.div`
   position: relative;
   width: 150px;
   height: 150px;
+  @media (max-width: 650px) {
+    top: -60px;
+  }
 `;
 const HumidityChart = styled.div``;
 
@@ -125,6 +157,10 @@ const SVG = styled.svg`
     stroke-dasharray: ${(props) => `${props.humidity} 100`};
     animation: ${Fillup} 2s linear 1;
   }
+  @media (max-width: 650px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const SVGRect = styled.svg`
@@ -133,6 +169,9 @@ const SVGRect = styled.svg`
   height: 100px; */
   position: relative;
   border-bottom: 1px solid #000;
+  @media (max-width: 650px) {
+    top: -0px;
+  }
 `;
 
 const MaxRect = styled.rect`
@@ -150,6 +189,9 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   margin-top: 15px;
+  @media (max-width: 650px) {
+    margin-top: 5px;
+  }
 `;
 const SmallIcon = styled.div`
   width: 24px;
@@ -157,6 +199,10 @@ const SmallIcon = styled.div`
   margin: 0 10px;
   img {
     width: 100%;
+  }
+  @media (max-width: 650px) {
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -178,6 +224,7 @@ export default function Panel({ weatherPanel, city, setIsSearching }) {
       <PanelContainer>
         <BasicField>
           <City>{city}</City>
+          <RWDTemp>{currentTemp} °C</RWDTemp>
           <Date>{dateStr}</Date>
           <WeatherState>{weatherPanel.weather_state_name}</WeatherState>
 
